@@ -74,11 +74,33 @@ export default class Discover extends React.Component {
     render() {
         // let filters = [this.state.term];
         let post = this.state.posts;
-        console.log(this.state.term)
         if (this.state.posts.length > 0 && this.state.term) {
-            post = this.state.posts.filter(p => {
-                return p.tags[0].tags.includes(this.state.term)
-            });
+            if(this.state.term.split(' ').length > 1){
+                post = this.state.posts.filter(p => {
+                    if(p.tags.length > 0){
+                        return (p.tags.filter( q => {
+                            return q[0].name.toLowerCase() === this.state.term.toLowerCase()
+                        })).length > 0
+                    }
+                    else return false
+                });
+            }
+            else {
+                post = this.state.posts.filter(p => {
+                    if(p.tags.length > 0){
+                        return (p.tags.filter( q => {
+                            return q[0].tags.includes(this.state.term.toLowerCase())
+                        })).length > 0
+                    }
+                    else return false
+                });
+            }
+
+            // p.filter(q => {
+            //     return(q.tags.filter( z => {
+            // return z[0].tags.includes("hoodie")}
+            // )).length > 0
+            // })
         }
         return (
             <div className="container mx-auto">
